@@ -1,0 +1,114 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",Roboto,sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#1f2937,#111827);
+}
+
+main{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:1.5rem;
+    padding:3rem;
+    border-radius:20px;
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(10px);
+    box-shadow:0 10px 30px rgba(0,0,0,0.4),inset 0 0 0 1px rgba(255,255,255,0.08);
+    animation:fadeIn .8s ease;
+}
+
+#countdown{
+    font-size:5rem;
+    font-weight:700;
+    color:white;
+    letter-spacing:2px;
+    animation:pulse 2s infinite;
+}
+
+#timeInput{
+    padding:.8rem 1rem;
+    border-radius:10px;
+    border:none;
+    outline:none;
+    width:150px;
+    text-align:center;
+    font-size:1rem;
+    background:rgba(255,255,255,0.1);
+    color:white;
+    transition:.25s;
+}
+
+#timeInput::placeholder{
+    color:rgba(255,255,255,0.6);
+}
+
+#timeInput:focus{
+    background:rgba(255,255,255,0.15);
+    transform:scale(1.05);
+}
+
+button{
+    width:150px;
+    padding:.8rem;
+    border:none;
+    border-radius:10px;
+    font-size:1rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:.25s;
+}
+
+#startButton{
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+    color:white;
+}
+
+#startButton:hover{
+    transform:translateY(-2px) scale(1.03);
+    box-shadow:0 6px 15px rgba(34,197,94,0.4);
+}
+
+#pauseButton{
+    background:linear-gradient(135deg,#ef4444,#dc2626);
+    color:white;
+}
+
+#pauseButton:hover{
+    transform:translateY(-2px) scale(1.03);
+    box-shadow:0 6px 15px rgba(239,68,68,0.4);
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes pulse{
+    0%{
+        transform:scale(1);
+        text-shadow:0 0 5px rgba(255,255,255,0.4);
+    }
+    50%{
+        transform:scale(1.05);
+        text-shadow:0 0 20px rgba(255,255,255,0.7);
+    }
+    100%{
+        transform:scale(1);
+        text-shadow:0 0 5px rgba(255,255,255,0.4);
+    }
+}
