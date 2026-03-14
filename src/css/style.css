@@ -261,3 +261,17 @@ footer {
   font-size: var(--small-font);
   padding: 1em;
 }
+
+
+/* CART ANIMATION */
+@keyframes cartPop {
+  0% { transform: scale(1) rotate(0deg); }
+  30% { transform: scale(1.25) rotate(-8deg); }
+  50% { transform: scale(1.15) rotate(6deg); }
+  70% { transform: scale(1.05) rotate(-3deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.cart.animate svg {
+  animation: cartPop 0.45s ease;
+}
