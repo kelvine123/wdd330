@@ -12,6 +12,7 @@ function addProductToCart(product) {
 async function addToCartHandler(e) {
   const product = await dataSource.findProductById(e.target.dataset.id);
   addProductToCart(product);
+  animateCart();
 }
 
 async function loadProduct() {
@@ -20,6 +21,16 @@ async function loadProduct() {
   const product = await dataSource.findProductById(productId);
   
   document.querySelector("#addToCart").dataset.id = product.Id;
+}
+
+function animateCart() {
+  const cartIcon = document.querySelector(".cart");
+
+  cartIcon.classList.add("animate");
+
+  setTimeout(() => {
+    cartIcon.classList.remove("animate");
+  }, 400);
 }
 
 loadProduct();
