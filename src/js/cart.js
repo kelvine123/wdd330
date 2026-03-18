@@ -25,4 +25,24 @@ function cartItemTemplate(item) {
   return newItem;
 }
 
+function updateCartCount() {
+  const cartItems = getLocalStorage("so-cart") || [];
+  const count = cartItems.reduce((total, item) => total + (item.quantity || 1), 0);
+
+  const cartIcon = document.querySelector(".cart"); 
+
+  if (cartIcon) {
+    let badge = cartIcon.querySelector(".cart-count");
+
+    // Create badge
+    if (!badge) {
+      badge = document.createElement("span");
+      badge.classList.add("cart-count");
+      cartIcon.appendChild(badge);
+    }
+
+    badge.textContent = count;
+  }
+}
 renderCartContents();
+updateCartCount();
