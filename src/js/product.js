@@ -1,5 +1,6 @@
 import ProductData from "./ProductData.mjs";
 import { getLocalStorage, setLocalStorage } from "./utils.mjs";
+import { updateCartCount } from "../js/utils.mjs";
 
 const dataSource = new ProductData("tents");
 
@@ -38,3 +39,5 @@ loadProduct();
 document
   .getElementById("addToCart")
   .addEventListener("click", addToCartHandler);
+
+updateCartCount();

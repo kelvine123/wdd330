@@ -38,3 +38,22 @@ export function renderListWithTemplate(template, parentElement, list, position =
   }
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
 }
+
+export function updateCartCount() {
+  const cartItems = JSON.parse(localStorage.getItem("so-cart")) || [];
+  const count = cartItems.reduce((total, item) => total + (item.quantity || 1), 0);
+
+  const cartIcon = document.querySelector(".cart");
+
+  if (!cartIcon) return;
+
+  let badge = cartIcon.querySelector(".cart-count");
+
+  if (!badge) {
+    badge = document.createElement("span");
+    badge.classList.add("cart-count");
+    cartIcon.appendChild(badge);
+  }
+
+  badge.textContent = count;
+}
