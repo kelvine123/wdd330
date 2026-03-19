@@ -291,3 +291,14 @@ footer {
   padding: 2px 6px;
   border-radius: 50%;
 }
+
+.cart-icon-img {
+  width: 20px;
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.cart-icon-img:hover {
+  transform: scale(1.1);
+}
