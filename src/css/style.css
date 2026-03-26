@@ -302,3 +302,33 @@ footer {
 .cart-icon-img:hover {
   transform: scale(1.1);
 }
+
+.cart-card__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; 
+  gap: 6px;
+}
+
+.cart-card {
+  position: relative;
+  padding-right: 40px;  
+}
+
+.remove-item {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+
+  padding-top: 15px;
+}
+
+.remove-item:hover {
+  color: red;
+  transform: scale(1.2);
+}

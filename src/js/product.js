@@ -5,24 +5,61 @@ import { updateCartCount } from "../js/utils.mjs";
 const dataSource = new ProductData("tents");
 
 function addProductToCart(product) {
-  const cart = getLocalStorage("so-cart") || [];
-  cart.push(product);
+  let cart = getLocalStorage("so-cart") || [];
+
+  const cleanProduct = {
+    Id: product.Id || product.id,
+    Name: product.Name,
+    Image: product.Image,
+    FinalPrice: product.FinalPrice,
+    Colors: product.Colors,
+    quantity: product.quantity || 1
+  };
+
+  const existingItem = cart.find(item => item.Id === cleanProduct.Id);
+
+  if (existingItem) {
+    existingItem.quantity += 1;
+  } else {
+    cart.push(cleanProduct);
+  }
+
   setLocalStorage("so-cart", cart);
 }
 
-async function addToCartHandler(e) {
-  const product = await dataSource.findProductById(e.target.dataset.id);
-  addProductToCart(product);
-  animateCart();
+// async function addToCartHandler(e) {
+//   const product = await dataSource.findProductById(e.target.dataset.id);
+//   console.log("PRODUCT:", product);
+//   addProductToCart(product);
+//   updateCartCount();
+//   animateCart();
+// }
+
+let currentProduct = null; // ✅ FIX
+
+function addToCartHandler() {
+  if (currentProduct) {
+    addProductToCart(currentProduct);
+    updateCartCount();
+    animateCart();
+  } else {
+    console.error("Product not loaded!");
+  }
 }
 
 async function loadProduct() {
   const params = new URLSearchParams(window.location.search);
   const productId = params.get("product");
+
   const product = await dataSource.findProductById(productId);
-  
-  document.querySelector("#addToCart").dataset.id = product.Id;
+
+  currentProduct = product;
+
+  document.getElementById("addToCart").disabled = false; // ✅ FIX
 }
+
+// disable until loaded
+document.getElementById("addToCart").disabled = true;
 
 function animateCart() {
   const cartIcon = document.querySelector(".cart");

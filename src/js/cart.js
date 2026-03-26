@@ -1,4 +1,4 @@
-import { getLocalStorage } from "./utils.mjs";
+import { getLocalStorage, updateCartCount } from "./utils.mjs";
 
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart") || [];
@@ -7,42 +7,46 @@ function renderCartContents() {
 }
 
 function cartItemTemplate(item) {
-  const newItem = `<li class="cart-card divider">
-  <a href="#" class="cart-card__image">
-    <img
-      src="${item.Image}"
-      alt="${item.Name}"
-    />
-  </a>
-  <a href="#">
-    <h2 class="card__name">${item.Name}</h2>
-  </a>
-  <p class="cart-card__color">${item.Colors[0].ColorName}</p>
-  <p class="cart-card__quantity">qty: 1</p>
-  <p class="cart-card__price">$${item.FinalPrice}</p>
-</li>`;
+  return `<li class="cart-card divider">
 
-  return newItem;
+    <button class="remove-item" data-id="${item.Id}">
+      ❌
+    </button>
+
+    <a href="#" class="cart-card__image">
+      <img src="${item.Image}" alt="${item.Name}" />
+    </a>
+    <a href="#">
+      <h2 class="card__name">${item.Name}</h2>
+    </a>
+    <p class="cart-card__color">${item.Colors[0].ColorName}</p>
+    <p class="cart-card__quantity">qty: ${item.quantity || 1}</p>
+
+  </li>`;
 }
 
-function updateCartCount() {
-  const cartItems = getLocalStorage("so-cart") || [];
-  const count = cartItems.reduce((total, item) => total + (item.quantity || 1), 0);
+function removeFromCart(productId) {
+  let cartItems = getLocalStorage("so-cart") || [];
 
-  const cartIcon = document.querySelector(".cart"); 
+  cartItems = cartItems.filter(item => {
+    const id = item.Id || item.id;
+    return id != productId;
+  });
 
-  if (cartIcon) {
-    let badge = cartIcon.querySelector(".cart-count");
+  localStorage.setItem("so-cart", JSON.stringify(cartItems));
 
-    // Create badge
-    if (!badge) {
-      badge = document.createElement("span");
-      badge.classList.add("cart-count");
-      cartIcon.appendChild(badge);
-    }
+  renderCartContents();
+  updateCartCount();
+}
 
-    badge.textContent = count;
+// Event listener
+document.querySelector(".product-list").addEventListener("click", function (e) {
+  if (e.target.classList.contains("remove-item")) {
+    const productId = e.target.dataset.id;
+    removeFromCart(productId);
   }
-}
+});
+
+// ✅ RUN ON PAGE LOAD
 renderCartContents();
 updateCartCount();

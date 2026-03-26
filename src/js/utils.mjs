@@ -41,19 +41,23 @@ export function renderListWithTemplate(template, parentElement, list, position =
 
 export function updateCartCount() {
   const cartItems = JSON.parse(localStorage.getItem("so-cart")) || [];
-  const count = cartItems.reduce((total, item) => total + (item.quantity || 1), 0);
+
+  const count = cartItems.reduce(
+    (total, item) => total + (item.quantity || 1), 
+    0
+  );
 
   const cartIcon = document.querySelector(".cart");
 
-  if (!cartIcon) return;
+  if (cartIcon) {
+    let badge = cartIcon.querySelector(".cart-count");
 
-  let badge = cartIcon.querySelector(".cart-count");
-
-  if (!badge) {
-    badge = document.createElement("span");
-    badge.classList.add("cart-count");
-    cartIcon.appendChild(badge);
+    if (!badge) {
+      badge = document.createElement("span");
+      badge.classList.add("cart-count");
+      cartIcon.appendChild(badge);
+    }
+    
+    badge.textContent = count;
   }
-
-  badge.textContent = count;
 }
