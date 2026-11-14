@@ -23,10 +23,13 @@ form.addEventListener('submit', async(e) => {
 
 function normalizeFlight(flight) {
     return {
-        airline: flight ? .airline ? .name ? ? 'Unknown Airline',
-        from: flight ? .departure ? .iata ? ? 'N/A',
-        to: flight ? .arrival ? .iata ? ? 'N/A',
-        time: flight ? .departure ? .scheduled ? ? 'N/A'
+        airline: flight?.airline?.name ?? 'Unknown Airline',
+        from: flight?.departure?.iata ?? 'N/A',
+        to: flight?.arrival?.iata ?? 'N/A',
+        departure: flight?.departure?.scheduled ?? 'N/A',
+        arrival: flight?.arrival?.scheduled ?? 'N/A',
+        flightNumber: flight?.flight?.iata ?? 'N/A',
+        status: flight?.flight_status ?? 'Unknown'
     };
 }
 
