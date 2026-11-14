@@ -1,23 +1,26 @@
-function convertToJson(res) {
-  if (res.ok) {
-    return res.json();
-  } else {
-    throw new Error("Bad Response");
+async function requestJson(path) {
+  const response = await fetch(path);
+  if (!response.ok) {
+    throw new Error(`Catalog request failed (${response.status}).`);
   }
+  return response.json();
 }
 
 export default class ProductData {
-  constructor(category) {
+  constructor(category = '') {
     this.category = category;
-    this.path = `../json/${this.category}.json`;
   }
+
   getData() {
-    return fetch(this.path)
-      .then(convertToJson)
-      .then((data) => data);
+    const query = this.category ? `?category=${encodeURIComponent(this.category)}` : '';
+    return requestJson(`/api/products${query}`);
   }
-  async findProductById(id) {
-    const products = await this.getData();
-    return products.find((item) => item.Id === id);
+
+  getCategories() {
+    return requestJson('/api/categories');
+  }
+
+  findProductById(id) {
+    return requestJson(`/api/products/${encodeURIComponent(id)}`);
   }
 }

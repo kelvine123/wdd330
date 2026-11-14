@@ -1,4 +1,5 @@
 import ExternalServices from './ExternalServices.mjs';
+import { formatKsh, toKes } from './currency.mjs';
 
 export default class CheckoutProcess {
     constructor(key) {
@@ -8,6 +9,7 @@ export default class CheckoutProcess {
         this.tax = 0;
         this.shipping = 0;
         this.orderTotal = 0;
+        this.currency = 'KES';
         this.external = new ExternalServices();
     }
 
@@ -23,31 +25,31 @@ export default class CheckoutProcess {
 
     calculateItemSubTotal() {
         this.itemTotal = this.list.reduce(
-            (total, item) => total + Number(item.FinalPrice ?? item.price ?? 0) * (Number(item.quantity) || 1),
+            (total, item) => total + Number(item.priceKes ?? toKes(item.FinalPrice ?? item.price ?? 0)) * (Number(item.quantity) || 1),
             0
         );
     }
 
     calculateOrderTotal() {
         this.calculateItemSubTotal();
-        this.tax = this.itemTotal * 0.06;
-        this.shipping = this.list.length > 0 ? 10 + 2 * (this.list.length - 1) : 0;
+        this.tax = Math.round(this.itemTotal * 0.06);
+        this.shipping = this.list.length > 0 ? toKes(10 + 2 * (this.list.length - 1)) : 0;
         this.orderTotal = this.itemTotal + this.tax + this.shipping;
         this.displayOrderTotals();
     }
 
     displayOrderTotals() {
-        document.getElementById('subtotal').innerText = this.itemTotal.toFixed(2);
-        document.getElementById('tax').innerText = this.tax.toFixed(2);
-        document.getElementById('shipping').innerText = this.shipping.toFixed(2);
-        document.getElementById('orderTotal').innerText = this.orderTotal.toFixed(2);
+        document.getElementById('subtotal').innerText = formatKsh(this.itemTotal);
+        document.getElementById('tax').innerText = formatKsh(this.tax);
+        document.getElementById('shipping').innerText = formatKsh(this.shipping);
+        document.getElementById('orderTotal').innerText = formatKsh(this.orderTotal);
     }
 
     packageItems(items) {
         return items.map((item) => ({
-            id: item.Id ?? item.id,
-            name: item.Name ?? item.name,
-            price: Number(item.FinalPrice ?? item.price ?? 0),
+            id: item.id ?? item.Id,
+            name: item.name ?? item.Name,
+            price: Number(item.priceKes ?? toKes(item.FinalPrice ?? item.price ?? 0)),
             quantity: Number(item.quantity) || 1
         }));
     }
@@ -63,13 +65,15 @@ export default class CheckoutProcess {
             lname: data.lname,
             street: data.street,
             city: data.city,
-            state: data.state,
-            zip: data.zip,
+            state: data.county,
+            zip: data.postalCode,
+            country: 'Kenya',
+            currency: this.currency,
             cardNumber: data.cardNumber,
             expiration: data.expiration,
             code: data.code,
             items: this.packageItems(this.list),
-            orderTotal: this.orderTotal.toFixed(2),
+            orderTotal: this.orderTotal,
             shipping: this.shipping,
             tax: this.tax.toFixed(2)
         };

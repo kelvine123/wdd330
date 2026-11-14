@@ -1,36 +1,42 @@
 import { getLocalStorage, updateCartCount } from './utils.mjs';
+import { formatKsh, toKes } from './currency.mjs';
 
 function renderCartContents() {
   const cartItems = getLocalStorage('so-cart') || [];
-  const htmlItems = cartItems.map((item) => cartItemTemplate(item));
-  document.querySelector('.product-list').innerHTML = htmlItems.join('');
+  const normalizedItems = cartItems.map((item) => ({
+    ...item,
+    priceKes: Number(item.priceKes ?? toKes(item.FinalPrice ?? item.price ?? 0)),
+    imageUrl: item.imageUrl ?? item.Image,
+    colors: item.colors ?? item.Colors ?? [],
+  }));
+  localStorage.setItem('so-cart', JSON.stringify(normalizedItems));
+  document.querySelector('.product-list').innerHTML = normalizedItems.map(cartItemTemplate).join('');
 
-  const subtotal = cartItems.reduce(
-    (total, item) => total + Number(item.FinalPrice ?? item.price ?? 0) * (Number(item.quantity) || 1),
+  const subtotal = normalizedItems.reduce(
+    (total, item) => total + item.priceKes * (Number(item.quantity) || 1),
     0
   );
-  document.querySelector('#cart-total').textContent = subtotal.toFixed(2);
+  document.querySelector('#cart-total').textContent = formatKsh(subtotal);
 }
 
 function cartItemTemplate(item) {
-  const color = item.Colors && item.Colors[0] ? item.Colors[0].ColorName : 'N/A';
-  const price = Number(item.FinalPrice ?? item.price ?? 0);
+  const color = item.colors[0]?.name ?? item.Colors?.[0]?.ColorName ?? 'Not specified';
 
   return `<li class="cart-card divider">
 
-    <button class="remove-item" data-id="${item.Id ?? item.id}">
+    <button class="remove-item" data-id="${item.id ?? item.Id}">
       Remove
     </button>
 
     <a href="#" class="cart-card__image">
-      <img src="${item.Image}" alt="${item.Name}" />
+      <img src="${item.imageUrl}" alt="${item.name ?? item.Name}" />
     </a>
     <a href="#">
-      <h2 class="card__name">${item.Name}</h2>
+      <h2 class="card__name">${item.name ?? item.Name}</h2>
     </a>
     <p class="cart-card__color">${color}</p>
     <p class="cart-card__quantity">qty: ${item.quantity || 1}</p>
-    <p class="cart-card__price">$${price.toFixed(2)}</p>
+    <p class="cart-card__price">${formatKsh(item.priceKes)}</p>
 
   </li>`;
 }
@@ -38,7 +44,7 @@ function cartItemTemplate(item) {
 function removeFromCart(productId) {
   let cartItems = getLocalStorage('so-cart') || [];
 
-  cartItems = cartItems.filter((item) => String(item.Id || item.id) !== String(productId));
+  cartItems = cartItems.filter((item) => String(item.id ?? item.Id) !== String(productId));
 
   localStorage.setItem('so-cart', JSON.stringify(cartItems));
 

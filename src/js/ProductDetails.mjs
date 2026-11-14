@@ -1,20 +1,22 @@
+import { formatKsh } from './currency.mjs';
+
 export default class ProductDetails {
-    constructor(product) {
-        this.product = product;
-    }
+  constructor(product) {
+    this.product = product;
+  }
 
-    render() {
-        const { product } = this;
-        const image = document.getElementById('productImage');
-        const color = product.Colors && product.Colors[0] ? product.Colors[0].ColorName : 'N/A';
+  render() {
+    const { product } = this;
+    const image = document.getElementById('productImage');
+    const firstColor = product.colors[0]?.name ?? 'Color not specified';
 
-        document.querySelector('.product-detail h2').textContent = product.Brand.Name;
-        document.querySelector('.product-detail h3').textContent = product.NameWithoutBrand;
-        image.src = product.Image;
-        image.alt = product.Name;
-        document.getElementById('productPrice').textContent = `$${Number(product.FinalPrice).toFixed(2)}`;
-        document.getElementById('productColor').textContent = color;
-        document.getElementById('productDesc').innerHTML = product.DescriptionHtmlSimple;
-        document.title = `Sleep Outside | ${product.NameWithoutBrand}`;
-    }
+    document.querySelector('.product-detail h2').textContent = product.brand;
+    document.querySelector('.product-detail h3').textContent = product.nameWithoutBrand;
+    image.src = product.imageUrl;
+    image.alt = product.name;
+    document.getElementById('productPrice').textContent = formatKsh(product.priceKes);
+    document.getElementById('productColor').textContent = firstColor;
+    document.getElementById('productDesc').innerHTML = product.descriptionHtml;
+    document.title = `SleepOutside | ${product.nameWithoutBrand}`;
+  }
 }

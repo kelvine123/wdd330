@@ -4,10 +4,9 @@ const checkout = new CheckoutProcess('so-cart');
 checkout.init();
 
 const form = document.getElementById('checkout-form');
-const zipInput = document.getElementById('zip');
+const postalCodeInput = document.getElementById('postalCode');
 
-// Recalculate totals when zip changes (simulate shipping/tax)
-zipInput.addEventListener('blur', () => {
+postalCodeInput.addEventListener('blur', () => {
     checkout.calculateOrderTotal();
 });
 
