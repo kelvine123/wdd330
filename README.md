@@ -1,59 +1,27 @@
-# ✈️ Ubuntu Airline
+# BYU-Pathway Worldwide Online
+## WDD 330 - Web Frontend Development II
 
-## Created by Kelvine Inganga
+### ⛺ SleepOutside Starter Code
 
-Ubuntu Airline is a modern flight booking web application designed and developed by Kelvine Inganga as part of a Web Frontend Development project.
+ - This repository is the start of the SleepOutside web application project for WDD 330. The repository contains branches which are checkpoints for the team and individual assignments throughout the course.
 
-The system allows users to search for flights, view available routes, and simulate booking flights using real-time aviation data.
+ - https://byui-cse.github.io/wdd330-ww-course/week01/team.html
 
----
+### Prerequisites
 
-## 🌍 About Ubuntu Airline
+- You must have Node installed to run the following commands.
+[WDD 330 Setup Environment](https://byui-cse.github.io/wdd330-ww-course/intro/) 
 
-Ubuntu Airline is a fictional but fully functional airline interface built to demonstrate:
+### Common Workflow Commands
 
-- Flight search functionality
-- API integration with aviation data
-- Dynamic rendering of flight results
-- Booking simulation using local storage
-- Clean and responsive user interface
+- `npm run lint` to run ESLint against your code to find errors.
+- `npm run format` to run Prettier to automatically format your code.
+- `npm run start` starts up a local server and updates on any JS or CSS/SCSS 
+- `npm run build` to build final files when you are ready to turn in.
 
----
-
-## 🧑‍💻 Developer
-
-**Kelvine Inganga**  
-Frontend Web Developer  
-Creator of Ubuntu Airline
 
 ---
+_BYU-Pathway Worldwide improves lives through access to spiritually based, online affordable higher education. Its mission is to develop disciples of Jesus Christ who are leaders in their homes, the Church, and their communities._
 
-## ✈️ Features
 
-- Search flights by departure and destination
-- Display airline, route, and schedule information
-- Book flights instantly (stored locally in browser)
-- Simple and fast user experience
 
----
-
-## ⚙️ Project Purpose
-
-This project was created for learning and demonstration purposes in Web Frontend Development. It showcases how JavaScript can interact with APIs and dynamically update a web interface.
-
----
-
-## 🚀 Status
-
-Ubuntu Airline is actively being improved and expanded with more features such as:
-
-- Better flight filtering
-- Improved UI/UX design
-- Enhanced booking system
-- Real-time API optimization
-
----
-
-## 💡 Vision
-
-To build a simple, clean, and efficient airline booking experience that demonstrates modern frontend development skills while keeping the user experience intuitive and fast.

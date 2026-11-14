@@ -1,23 +1,63 @@
-export async function getFlights(from, to) {
-    try {
-        const API_KEY =
-            import.meta.env.VITE_API_KEY;
+// wrapper for querySelector...returns matching element
+export function qs(selector, parent = document) {
+  return parent.querySelector(selector);
+}
+// or a more concise version if you are into that sort of thing:
+// export const qs = (selector, parent = document) => parent.querySelector(selector);
 
-        const res = await fetch(
-            `https://api.aviationstack.com/v1/flights?access_key=${API_KEY}&dep_iata=${from}&arr_iata=${to}`
-        );
+// retrieve data from localstorage
+export function getLocalStorage(key) {
+  return JSON.parse(localStorage.getItem(key));
+}
+// save data to local storage
+export function setLocalStorage(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+// set a listener for both touchend and click
+export function setClick(selector, callback) {
+  qs(selector).addEventListener("touchend", (event) => {
+    event.preventDefault();
+    callback();
+  });
+  qs(selector).addEventListener("click", callback);
+}
 
-        const data = await res.json();
+// get the product id from the query string
+export function getParam(param) {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const product = urlParams.get(param);
+  return product
+}
 
-        if (!data || !data.data) {
-            console.error("Invalid API response:", data);
-            return [];
-        }
+export function renderListWithTemplate(template, parentElement, list, position = "afterbegin", clear = false) {
+  const htmlStrings = list.map(template);
+  // if clear is true we need to clear out the contents of the parent.
+  if (clear) {
+    parentElement.innerHTML = "";
+  }
+  parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
+}
 
-        return data.data;
+export function updateCartCount() {
+  const cartItems = JSON.parse(localStorage.getItem("so-cart")) || [];
 
-    } catch (error) {
-        console.error('Error fetching flights:', error);
-        return [];
+  const count = cartItems.reduce(
+    (total, item) => total + (item.quantity || 1), 
+    0
+  );
+
+  const cartIcon = document.querySelector(".cart");
+
+  if (cartIcon) {
+    let badge = cartIcon.querySelector(".cart-count");
+
+    if (!badge) {
+      badge = document.createElement("span");
+      badge.classList.add("cart-count");
+      cartIcon.appendChild(badge);
     }
+    
+    badge.textContent = count;
+  }
 }
